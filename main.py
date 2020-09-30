@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from pydantic import BaseModel
 
 
@@ -30,9 +30,18 @@ fake_items_db = [{"item_name": "Foo"}, {
 
 
 # When you declare other function parameters that are not part of the path parameters, they are automatically interpreted as "query" parameters.
+# @app.get("/items/")
+# async def read_item(skip: int = 0, limit: int = 10):
+#     return fake_items_db[skip: skip+limit]
+
+
+# Query Parameters and String Validations
 @app.get("/items/")
-async def read_item(skip: int = 0, limit: int = 10):
-    return fake_items_db[skip: skip+limit]
+async def read_items(q: Optional[str] = Query(None, min_length=3, max_length=50, regex="^fixedquery$")):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
 
 
 # Optional parameters
