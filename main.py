@@ -37,7 +37,7 @@ fake_items_db = [{"item_name": "Foo"}, {
 
 # Query Parameters and String Validations
 @app.get("/items/")
-async def read_items(q: Optional[str] = Query(None, min_length=3, max_length=50, regex="^fixedquery$")):
+async def read_items(q: str = Query(..., min_length=3)):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
         results.update({"q": q})
