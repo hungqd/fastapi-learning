@@ -90,7 +90,14 @@ async def read_user_item(user_id: int, item_id: str, q: Optional[str] = None, sh
 
 # Query parameter list / multiple values
 @app.get("/items/")
-async def read_items(q: Optional[List[str]] = Query(None)):
+async def read_items(
+    q: Optional[List[str]] = Query(
+        None,
+        title="Query string",
+        description="Query string for the items to search in the database that have a good match",
+        min_length=3
+    )
+):
     query_items = {"q": q}
     return query_items
 
